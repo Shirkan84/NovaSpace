@@ -1,0 +1,47 @@
+import { Canvas } from '@react-three/fiber'
+import { OrbitControls } from '@react-three/drei'
+import { useState } from 'react'
+
+const environments = {
+  personal: 'My Personal World',
+  plaza: 'City Plaza',
+  pub: 'Cozy Pub',
+  beach: 'Paradise Beach'
+}
+
+function Scene({ environment }) {
+  return (
+    <>
+      <ambientLight intensity={0.5} />
+      <pointLight position={[10, 10, 10]} />
+      <mesh position={[0, 0, 0]}>
+        <sphereGeometry args={[1, 32, 32]} />
+        <meshStandardMaterial color={environment === 'beach' ? 'skyblue' : environment === 'pub' ? 'orange' : environment === 'plaza' ? 'lightgreen' : 'pink'} />
+      </mesh>
+    </>
+  )
+}
+
+export default function NovaSpaceApp() {
+  const [environment, setEnvironment] = useState('personal')
+
+  return (
+    <div className="w-full h-screen bg-gray-900 text-white flex flex-col items-center">
+      <div className="p-4 space-x-2">
+        {Object.entries(environments).map(([key, name]) => (
+          <button
+            key={key}
+            onClick={() => setEnvironment(key)}
+            className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-600"
+          >
+            {name}
+          </button>
+        ))}
+      </div>
+      <Canvas className="flex-1 w-full">
+        <Scene environment={environment} />
+        <OrbitControls />
+      </Canvas>
+    </div>
+  )
+}
